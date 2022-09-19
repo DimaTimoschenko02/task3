@@ -4,7 +4,16 @@ import {
   IsBooleanString,
   MaxLength,
   MinLength,
+  IsEnum,
 } from 'class-validator';
+
+//TODO:remove?
+enum Categories {
+  'idea',
+  'task',
+  'quote',
+  'random',
+}
 
 export class UpdateNoteDto {
   @IsString()
@@ -14,6 +23,7 @@ export class UpdateNoteDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsEnum(Categories)
   category: string;
 
   @IsString()
@@ -24,6 +34,7 @@ export class UpdateNoteDto {
   @IsBooleanString()
   archieved: boolean;
 }
+
 export default class CreateNoteDTO {
   @IsString()
   @MinLength(3)
@@ -32,6 +43,7 @@ export default class CreateNoteDTO {
 
   @IsString()
   @IsNotEmpty()
+  @IsEnum(Categories)
   category: string;
 
   @IsString()

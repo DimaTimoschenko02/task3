@@ -3,12 +3,14 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
 } from '@nestjs/common';
 import { getDates, setCreateTime } from 'src/utils/date.utils';
-import { AppController } from '../app.controller';
+
 import CreateNoteDTO, { UpdateNoteDto } from './dto/note.dto';
 import { NoteService } from './note.service';
 
@@ -31,7 +33,7 @@ export class NoteController {
   getOneHangler(@Param('id') id: string) {
     const note = this.noteService.getOneById(id);
     if (!note) {
-      return { error: `no Note with id ${id}` };
+      throw new HttpException(`there is no element with id: ${id}`, HttpStatus.BAD_REQUEST);
     }
     return note;
   }
@@ -39,7 +41,7 @@ export class NoteController {
   deleteOneHandler(@Param('id') id: string) {
     const note = this.noteService.deleteOne(id);
     if (!note) {
-      return { error: `no Note with id ${id}` };
+      throw new HttpException(`there is no element with id: ${id}`, HttpStatus.BAD_REQUEST);
     }
     return note;
   }
@@ -49,7 +51,7 @@ export class NoteController {
     const dates = getDates(updateDto.content);
     const note = this.noteService.put({ ...updateDto, dates, id });
     if (!note) {
-      return { error: `no Note with id ${id}` };
+      throw new HttpException(`there is no element with id: ${id}`, HttpStatus.BAD_REQUEST);
     }
     return note;
   }
