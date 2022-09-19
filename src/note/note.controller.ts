@@ -20,52 +20,84 @@ export class NoteController {
 
   @Get('/')
   getAllHangler() {
-    const allNotes = this.noteService.getAll();
-    return { data: allNotes };
+    try {
+      const allNotes = this.noteService.getAll();
+      return { data: allNotes };
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get('/stats')
   getStatsHangler() {
-    const stats = this.noteService.getStatistic();
-    return { stats };
+    try {
+      const stats = this.noteService.getStatistic();
+      return { stats };
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    }
   }
   @Get(':id')
   getOneHangler(@Param('id') id: string) {
-    const note = this.noteService.getOneById(id);
-    if (!note) {
-      throw new HttpException(`there is no element with id: ${id}`, HttpStatus.BAD_REQUEST);
+    try {
+      const note = this.noteService.getOneById(id);
+      if (!note) {
+        throw new HttpException(
+          `No element with id: ${id}`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      return note;
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }
-    return note;
   }
   @Delete(':id')
   deleteOneHandler(@Param('id') id: string) {
-    const note = this.noteService.deleteOne(id);
-    if (!note) {
-      throw new HttpException(`there is no element with id: ${id}`, HttpStatus.BAD_REQUEST);
+    try {
+      const note = this.noteService.deleteOne(id);
+      if (!note) {
+        throw new HttpException(
+          `No element with id: ${id}`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      return note;
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }
-    return note;
   }
   @Patch(':id')
   updateOne(@Body() updateDto: UpdateNoteDto, @Param('id') id: string) {
-    console.log(id);
-    const dates = getDates(updateDto.content);
-    const note = this.noteService.put({ ...updateDto, dates, id });
-    if (!note) {
-      throw new HttpException(`there is no element with id: ${id}`, HttpStatus.BAD_REQUEST);
+    try {
+      const dates = getDates(updateDto.content);
+      const note = this.noteService.put({ ...updateDto, dates, id });
+      if (!note) {
+        throw new HttpException(
+          `No element with id: ${id}`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      return note;
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }
-    return note;
   }
   @Post('/')
   createNote(@Body() createDto: CreateNoteDTO) {
-    const dates = getDates(createDto.content);
-    const createdAt = setCreateTime();
-    const note = this.noteService.create({
-      ...createDto,
-      archieved: false,
-      id: Date.now().toString(),
-      dates,
-      createdAt,
-    });
-    return note;
+    try {
+      const dates = getDates(createDto.content);
+      const createdAt = setCreateTime();
+      const note = this.noteService.create({
+        ...createDto,
+        archieved: false,
+        id: Date.now().toString(),
+        dates,
+        createdAt,
+      });
+      return note;
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    }
   }
 }
