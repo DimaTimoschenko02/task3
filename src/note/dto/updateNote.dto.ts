@@ -9,7 +9,7 @@ import { Categories } from '../notes.constants';
 
 
 
-export class UpdateNoteDto {
+export default class UpdateNoteDto {
   @IsString()
   @MinLength(3)
   @MaxLength(15)

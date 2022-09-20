@@ -13,7 +13,12 @@ export interface IUpdateNote {
   name: string;
   content: string;
   archieved: boolean;
-  dates: string[];
+  category: string;
+}
+export interface ICreateNote {
+  name: string;
+  content: string;
+  category: string;
 }
 export interface IOjbectKeys {
   [key: string]: number;

@@ -1,7 +1,7 @@
 import { IsString, MinLength, MaxLength, IsNotEmpty, IsEnum } from "class-validator";
 import { Categories } from "../notes.constants";
 
-export default class CreateNoteDTO {
+export default class CreateNoteDto {
     @IsString()
     @MinLength(3)
     @MaxLength(15)

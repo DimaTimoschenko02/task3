@@ -1,22 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { getDates, setCreateTime } from 'src/utils/date.utils';
 import Note from '../database/database';
-import { INote } from './note.interface';
+import { ICreateNote, INote, IStats } from './note.interface';
 import { IUpdateNote } from './note.interface';
-
-//TODO:should i move these interaces smwr?
 
 @Injectable()
 export class NoteService {
   getAll() {
     return Note;
   }
+
   getOneById(id: string) {
-    let note: INote | null = null;
-    Note.forEach((el) => {
-      if (el.id === id) note = el;
+    let note: INote | null = Note.find((el) => {
+      if (el.id === id) {
+        return el;
+      }
     });
     return note;
   }
+
   getStatistic() {
     const statistic: IStats = {
       active: {
@@ -44,8 +46,8 @@ export class NoteService {
 
   deleteOne(id: string) {
     let index: number | null = null;
-    Note.forEach((e, i) => {
-      if (e.id === id) index = i;
+    Note.find((e, i) => {
+      if (e.id === id) return (index = i);
     });
     if (index === null) {
       return index;
@@ -56,17 +58,23 @@ export class NoteService {
 
   put(note: IUpdateNote) {
     let newNote: INote | null = null;
-    console.log(note);
-    Note.forEach((el) => {
-      if (el.id === note.id) {
-        el = { ...el, ...note };
-        newNote = el;
+    const dates = getDates(note.content);
+    for (let i = 0; i < Note.length; i++) {
+      if (Note[i].id === note.id) {
+        Note[i] = { ...Note[i], ...note, dates };
+        newNote = Note[i];
+        break;
       }
-    });
+    }
+
     return newNote;
   }
-  create(note: INote) {
-    Note.push(note);
-    return note;
+
+  create(note: ICreateNote) {
+    const dates = getDates(note.content);
+    const createdAt = setCreateTime();
+    const id = Date.now().toString();
+    Note.push({ ...note, dates, createdAt, id, archieved: false });
+    return { ...note, dates, createdAt, id, archieved: false };
   }
 }
