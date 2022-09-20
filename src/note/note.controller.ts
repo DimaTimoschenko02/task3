@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { getDates, setCreateTime } from 'src/utils/date.utils';
 
-import CreateNoteDTO, { UpdateNoteDto } from './dto/note.dto';
+import CreateNoteDTO, { UpdateNoteDto } from './dto/updateNote.dto';
 import { NoteService } from './note.service';
 
 @Controller('notes')

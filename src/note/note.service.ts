@@ -4,20 +4,7 @@ import { INote } from './note.interface';
 import { IUpdateNote } from './note.interface';
 
 //TODO:should i move these interaces smwr?
-interface IOjbectKeys {
-  [key: string]: number;
-}
-export interface ICategory extends IOjbectKeys {
-  idea: number;
-  task: number;
-  random: number;
-  quote: number;
-}
 
-export interface IStats {
-  arch: ICategory;
-  active: ICategory;
-}
 @Injectable()
 export class NoteService {
   getAll() {
