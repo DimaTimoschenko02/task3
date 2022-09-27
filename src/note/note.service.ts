@@ -6,11 +6,11 @@ import { IUpdateNote } from './note.interface';
 
 @Injectable()
 export class NoteService {
-  getAll() {
+  getAll():INote[] {
     return Note;
   }
 
-  getOneById(id: string) {
+  getOneById(id: string):INote|null {
     let note: INote | null = Note.find((el) => {
       if (el.id === id) {
         return el;
@@ -19,7 +19,7 @@ export class NoteService {
     return note;
   }
 
-  getStatistic() {
+  getStatistic():IStats {
     const statistic: IStats = {
       active: {
         quote: 0,
@@ -44,19 +44,19 @@ export class NoteService {
     return statistic;
   }
 
-  deleteOne(id: string) {
+  deleteOne(id: string):INote | null {
     let index: number | null = null;
     Note.find((e, i) => {
       if (e.id === id) return (index = i);
     });
     if (index === null) {
-      return index;
+      return index as null;
     }
     const deleted = Note.splice(index, 1);
-    return deleted;
+    return deleted[0];
   }
 
-  put(note: IUpdateNote) {
+  put(note: IUpdateNote):INote|null {
     let newNote: INote | null = null;
     const dates = getDates(note.content);
     for (let i = 0; i < Note.length; i++) {
@@ -70,7 +70,7 @@ export class NoteService {
     return newNote;
   }
 
-  create(note: ICreateNote) {
+  create(note: ICreateNote) :INote{
     const dates = getDates(note.content);
     const createdAt = setCreateTime();
     const id = Date.now().toString();
